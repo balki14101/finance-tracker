@@ -1,10 +1,23 @@
 import { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { api } from "../../services/api";
 
 export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleLogin = async () => {
+    try {
+      await api.post("/login", {
+        email,
+        password,
+      });
+      alert("Login successful");
+      navigation.navigate("Home");
+    } catch (error) {
+      alert("Invalid Credentials");
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -24,7 +37,7 @@ export default function LoginScreen({ navigation }: any) {
         onChangeText={setPassword}
       />
 
-      <Button title="Login" onPress={() => {}} />
+      <Button title="Login" onPress={handleLogin} />
 
       <Text style={styles.link} onPress={() => navigation.navigate("Signup")}>
         Don't have an account? Signup

@@ -1,10 +1,22 @@
 import { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { api } from "../../services/api";
 
 export default function SignupScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleSignup = async () => {
+    alert("api function call");
+    try {
+      alert("inside try");
+      await api.post("/signup", { email, password });
+      alert("Signup successful");
+      navigation.navigate("Login");
+    } catch (error) {
+      alert("Signup Failed");
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Signup</Text>
@@ -24,7 +36,7 @@ export default function SignupScreen({ navigation }: any) {
         onChangeText={setPassword}
       />
 
-      <Button title="Signup" onPress={() => {}} />
+      <Button title="Signup" onPress={handleSignup} />
 
       <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
         Already have an account? Login
