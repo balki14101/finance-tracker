@@ -1,8 +1,12 @@
+import { setUser } from "@/src/store/slices/authSlice";
 import { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { useDispatch } from "react-redux";
 import { api } from "../../services/api";
 
 export default function LoginScreen({ navigation }: any) {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,8 +16,9 @@ export default function LoginScreen({ navigation }: any) {
         email,
         password,
       });
+      dispatch(setUser({ email: email }));
       alert("Login successful");
-      navigation.navigate("Home");
+      navigation.navigate("Dashboard");
     } catch (error) {
       alert("Invalid Credentials");
     }
