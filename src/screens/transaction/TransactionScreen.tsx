@@ -19,6 +19,12 @@ const TransactionScreen = () => {
     (state: any) => state.transaction.transactions,
   );
 
+  const total = transactions.reduce(
+    (acc: any, item: any) =>
+      item.type == "income" ? acc + item.amount : acc - item.amount,
+    0,
+  );
+
   const authState = useSelector((state: any) => state.auth);
   const transState = useSelector((state: any) => state.transaction);
   console.log("FULL STATE:", authState);
@@ -39,10 +45,9 @@ const TransactionScreen = () => {
       style={{
         padding: 20,
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
       }}
     >
+      <Text>Total: {total}</Text>
       {transactions?.map((item: any, index: string) => (
         <Text key={index}>
           {item.type} - {item.amount}
