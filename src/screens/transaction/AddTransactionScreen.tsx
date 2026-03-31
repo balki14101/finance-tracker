@@ -15,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import Icon from "../../../assets/images/react-logo.png";
 
-const TransactionScreen = () => {
+const AddTransactionScreen = () => {
   const dispatch = useDispatch();
   const [active, setActive] = useState("Expense");
 
@@ -155,7 +155,8 @@ const TransactionScreen = () => {
           />
         </>
       ) : null}
-      <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
+      <View style={styles.addButton}></View>
+      <TouchableOpacity onPress={handleAdd}>
         <Text
           style={{
             textAlign: "center",
@@ -172,16 +173,16 @@ const TransactionScreen = () => {
       </TouchableOpacity>
 
       {/* <Text>Total: {total}</Text>
-      {transactions?.map((item: any, index: string) => (
-        <Text key={index}>
-          {item.type} - {item.amount}
-        </Text>
-      ))} */}
+          {transactions?.map((item: any, index: string) => (
+            <Text key={index}>
+              {item.type} - {item.amount}
+            </Text>
+          ))} */}
     </SafeAreaView>
   );
 };
 
-export default TransactionScreen;
+export default AddTransactionScreen;
 
 const styles = StyleSheet.create({
   header: {

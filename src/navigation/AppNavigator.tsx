@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import LoginScreen from "../screens/auth/LoginScreen";
 import SignupScreen from "../screens/auth/SignupScreen";
 import DashboardScreen from "../screens/dashboard/DashboardScreen";
+import AddTransactionScreen from "../screens/transaction/AddTransactionScreen";
 import TransactionScreen from "../screens/transaction/TransactionScreen";
 
 const Stack = createNativeStackNavigator();
@@ -17,6 +18,10 @@ export default function AppNavigator() {
           <>
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
             <Stack.Screen name="Transaction" component={TransactionScreen} />
+            <Stack.Screen
+              name="AddTransaction"
+              component={AddTransactionScreen}
+            />
           </>
         ) : (
           <>

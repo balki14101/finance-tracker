@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 type transaction = {
   amount: number;
   type: "income" | "expense";
+  date: string;
 };
 type transactionState = {
   transactions: transaction[];
