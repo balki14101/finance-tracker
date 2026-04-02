@@ -24,15 +24,15 @@ const DashboardScreen = ({ navigation }: any) => {
     0,
   );
   const totalIncome = transactions.reduce(
-    (acc: any, item: any) => (item.type == "income" ? acc + item.amount : null),
+    (acc: any, item: any) => (item.type == "Income" ? acc + item.amount : acc),
     0,
   );
   const totalExpense = transactions.reduce(
-    (acc: any, item: any) =>
-      item.type == "expense" ? acc + item.amount : null,
+    (acc: any, item: any) => (item.type == "Expense" ? acc + item.amount : acc),
     0,
   );
   console.log("user in dashboard", user);
+  console.log(totalExpense);
   const visibleTransactions = expand ? transactions : transactions.slice(-3);
   return (
     <SafeAreaView style={styles.container}>
@@ -49,7 +49,7 @@ const DashboardScreen = ({ navigation }: any) => {
       <View style={styles.buttonView}>
         <TouchableOpacity
           style={styles.addTransactionButton}
-          onPress={() => navigation.navigate("AddTransaction")}
+          onPress={() => navigation.navigate("Transaction")}
         >
           <Text
             style={{ textAlign: "center", color: "#FFFFFF", fontWeight: 500 }}
@@ -65,50 +65,6 @@ const DashboardScreen = ({ navigation }: any) => {
         </TouchableOpacity>
       </View>
       {transactions.length > 0 ? (
-        //   <View style={styles.transactionSummary}>
-        //     <Text>Recent Transactions</Text>
-        //     {visibleTransactions.map((item: any, index: any) => (
-        //       <View key={index}>
-        //         {item.type == "income" ? (
-        //           <Text style={{ borderBottomColor: "#808080", borderWidth: 1 }}>
-        //             <Ionicons name="arrow-up" size={20} color="green" /> + ₹{" "}
-        //             {item.amount} {}
-        //           </Text>
-        //         ) : (
-        //           <Text
-        //             style={{
-        //               borderBottomColor: "#808080",
-        //               borderBottomWidth: 0.4,
-        //               fontSize: 24,
-        //               fontWeight: 600,
-        //               color: "#808080",
-        //             }}
-        //           >
-        //             <Ionicons name="arrow-down" size={20} color="red" />
-        //             {"- "}
-        //             <Text
-        //               style={{
-        //                 color: "#000000",
-        //               }}
-        //             >
-        //               ₹ {item.amount}
-        //             </Text>
-        //             {" Grocery"}
-        //             {}
-        //           </Text>
-        //         )}
-        //       </View>
-        //     ))}
-        //     <Text
-        //       style={{ textAlign: "right" }}
-        //       onPress={() => {
-        //         setExpand(!expand);
-        //       }}
-        //     >
-        //       {expand ? "Hide" : "See more"}
-        //     </Text>
-        //   </View>
-        // )
         <View style={styles.transactionSummary}>
           <Text>Recent Transactions</Text>
 

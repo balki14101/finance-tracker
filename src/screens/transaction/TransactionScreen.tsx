@@ -1,23 +1,19 @@
 import React, { useState } from "react";
 import {
-  Image,
+  FlatList,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { addTransaction } from "@/src/store/slices/transactionSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Icon from "../../../assets/images/react-logo.png";
-
-const TransactionScreen = () => {
+const TransactionScreen = ({ navigation }: any) => {
   const dispatch = useDispatch();
-  const [active, setActive] = useState("Expense");
+  const [active, setActive] = useState("All");
 
   const [amount, setAmount] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -40,43 +36,11 @@ const TransactionScreen = () => {
   console.log("FULL STATE:", authState);
   console.log("FULL STATE:", transState);
 
-  const categoryList = [
-    {
-      categoryIcon: Icon,
-      categoryName: "Food",
-    },
-    {
-      categoryIcon: Icon,
-      categoryName: "Entertainment",
-    },
-    {
-      categoryIcon: Icon,
-      categoryName: "Travel",
-    },
-    {
-      categoryIcon: Icon,
-      categoryName: "Shopping",
-    },
-    {
-      categoryIcon: Icon,
-      categoryName: "Medicine",
-    },
-    {
-      categoryIcon: Icon,
-      categoryName: "Others",
-    },
-  ];
+  const visibleTransactions =
+    active == "All"
+      ? transactions
+      : transactions.filter((item: any) => item.type == active);
 
-  function handleAdd() {
-    dispatch(
-      addTransaction({
-        amount: Number(amount),
-        type: "expense",
-      }),
-    );
-    setAmount("");
-    console.log("updated state", transactions);
-  }
   return (
     <SafeAreaView
       style={{
@@ -85,16 +49,21 @@ const TransactionScreen = () => {
         // backgroundColor: "red",
       }}
     >
-      <Text style={styles.header}>Enter Amount</Text>
-
-      <TextInput
-        placeholder="Amount"
-        keyboardType="numeric"
-        value={amount}
-        onChangeText={setAmount}
-        style={styles.amountTextInput}
-      />
       <View style={styles.toggleButtonView}>
+        <TouchableOpacity
+          style={active == "All" ? styles.activeToggle : styles.inactiveToggle}
+          onPress={() => setActive("All")}
+        >
+          <Text
+            style={
+              active == "All"
+                ? styles.activeToggletext
+                : styles.inactiveToggletext
+            }
+          >
+            All
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={
             active == "Expense" ? styles.activeToggle : styles.inactiveToggle
@@ -128,34 +97,31 @@ const TransactionScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      {active == "Expense" ? (
-        <>
-          <Text style={styles.header}>Select Category</Text>
-          <View style={styles.grid}>
-            {categoryList.map((item, index) => (
-              <TouchableOpacity
-                key={String(index)}
-                style={styles.categoryView}
-                onPress={() => {
-                  setSelectedCategory(item.categoryName);
-                }}
-              >
-                <Image source={item.categoryIcon} style={styles.iconStyle} />
-                <Text style={styles.iconText}>{item.categoryName}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+      {transactions.length > 0 ? (
+        <View style={styles.transactionSummary}>
+          <Text>Recent Transactions</Text>
 
-          <TextInput
-            placeholder="Add note"
-            keyboardType="default"
-            value={note}
-            onChangeText={setNote}
-            style={styles.noteInput}
-          />
-        </>
+          <View style={styles.listContainer}>
+            <FlatList
+              data={visibleTransactions}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <View style={styles.itemContainer}>
+                  <Text>
+                    {item.type === "income" ? "⬆" : "⬇"} ₹ {item.amount}
+                  </Text>
+                </View>
+              )}
+            />
+          </View>
+        </View>
       ) : null}
-      <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
+
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate("AddTransaction")}
+      >
         <Text
           style={{
             textAlign: "center",
@@ -167,16 +133,9 @@ const TransactionScreen = () => {
             paddingVertical: 8,
           }}
         >
-          Add
+          Add Transaction
         </Text>
       </TouchableOpacity>
-
-      {/* <Text>Total: {total}</Text>
-      {transactions?.map((item: any, index: string) => (
-        <Text key={index}>
-          {item.type} - {item.amount}
-        </Text>
-      ))} */}
     </SafeAreaView>
   );
 };
@@ -254,4 +213,20 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   addButton: { flex: 1, justifyContent: "flex-end" },
+  transactionSummary: {
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+    borderRadius: 16,
+    marginVertical: 16,
+    flex: 1,
+  },
+  listContainer: {
+    // maxHeight: 250,
+  },
+
+  itemContainer: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#ccc",
+    paddingVertical: 10,
+  },
 });

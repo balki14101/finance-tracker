@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -17,10 +18,10 @@ import Icon from "../../../assets/images/react-logo.png";
 
 const AddTransactionScreen = () => {
   const dispatch = useDispatch();
-  const [active, setActive] = useState("Expense");
-
   const [amount, setAmount] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [active, setActive] = useState("Expense");
+  const [selectedCategory, setSelectedCategory] = useState("Food");
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const [note, setNote] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -68,14 +69,18 @@ const AddTransactionScreen = () => {
   ];
 
   function handleAdd() {
-    dispatch(
-      addTransaction({
-        amount: Number(amount),
-        type: "expense",
-      }),
-    );
-    setAmount("");
-    console.log("updated state", transactions);
+    if (amount != "") {
+      dispatch(
+        addTransaction({
+          amount: Number(amount),
+          type: active,
+          selectedCategory: selectedCategory,
+          note: note,
+        }),
+      );
+      setAmount("");
+      console.log("updated state", transactions);
+    } else Alert.alert("Enter the amount");
   }
   return (
     <SafeAreaView
@@ -135,9 +140,15 @@ const AddTransactionScreen = () => {
             {categoryList.map((item, index) => (
               <TouchableOpacity
                 key={String(index)}
-                style={styles.categoryView}
+                style={[
+                  styles.categoryView,
+                  index == selectedCategoryIndex
+                    ? { backgroundColor: "red" }
+                    : null,
+                ]}
                 onPress={() => {
                   setSelectedCategory(item.categoryName);
+                  setSelectedCategoryIndex(index);
                 }}
               >
                 <Image source={item.categoryIcon} style={styles.iconStyle} />

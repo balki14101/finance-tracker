@@ -4,6 +4,8 @@ type transaction = {
   amount: number;
   type: "income" | "expense";
   date: string;
+  selectedCategory: string;
+  note: string;
 };
 type transactionState = {
   transactions: transaction[];
