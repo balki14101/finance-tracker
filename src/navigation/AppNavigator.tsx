@@ -17,10 +17,27 @@ export default function AppNavigator() {
         {user ? (
           <>
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
-            <Stack.Screen name="Transaction" component={TransactionScreen} />
+            <Stack.Screen
+              name="Transaction"
+              component={TransactionScreen}
+              options={{
+                headerShown: true,
+                title: "Transactions",
+                headerStyle: {
+                  backgroundColor: "lightblue",
+                },
+              }}
+            />
             <Stack.Screen
               name="AddTransaction"
               component={AddTransactionScreen}
+              options={{
+                headerShown: true,
+                title: "Add Transactions",
+                headerStyle: {
+                  backgroundColor: "lightblue",
+                },
+              }}
             />
           </>
         ) : (

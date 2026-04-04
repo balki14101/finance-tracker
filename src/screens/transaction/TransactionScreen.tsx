@@ -43,6 +43,7 @@ const TransactionScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView
+      edges={["left", "right", "bottom"]}
       style={{
         paddingHorizontal: 20,
         flex: 1,
@@ -97,7 +98,7 @@ const TransactionScreen = ({ navigation }: any) => {
           </Text>
         </TouchableOpacity>
       </View>
-      {transactions.length > 0 ? (
+      {visibleTransactions.length > 0 ? (
         <View style={styles.transactionSummary}>
           <Text>Recent Transactions</Text>
 
@@ -116,7 +117,10 @@ const TransactionScreen = ({ navigation }: any) => {
             />
           </View>
         </View>
-      ) : null}
+      ) : (
+        <Text>No Transactions made</Text>
+      )}
+      <View style={{ flex: 1 }}></View>
 
       <TouchableOpacity
         style={styles.addButton}
@@ -159,6 +163,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 8,
   },
   activeToggle: {
     justifyContent: "center",
@@ -212,7 +217,7 @@ const styles = StyleSheet.create({
     padding: 4,
     marginVertical: 8,
   },
-  addButton: { flex: 1, justifyContent: "flex-end" },
+  addButton: { justifyContent: "flex-end" },
   transactionSummary: {
     backgroundColor: "#FFFFFF",
     padding: 16,

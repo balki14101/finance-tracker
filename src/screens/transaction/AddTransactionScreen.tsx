@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { addTransaction } from "@/src/store/slices/transactionSlice";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Icon from "../../../assets/images/react-logo.png";
@@ -73,6 +74,7 @@ const AddTransactionScreen = () => {
       dispatch(
         addTransaction({
           amount: Number(amount),
+          date: date.toDateString(),
           type: active,
           selectedCategory: selectedCategory,
           note: note,
@@ -84,10 +86,11 @@ const AddTransactionScreen = () => {
   }
   return (
     <SafeAreaView
+      edges={["left", "right", "bottom"]}
       style={{
         paddingHorizontal: 20,
         flex: 1,
-        // backgroundColor: "red",
+        backgroundColor: "white",
       }}
     >
       <Text style={styles.header}>Enter Amount</Text>
@@ -99,6 +102,34 @@ const AddTransactionScreen = () => {
         onChangeText={setAmount}
         style={styles.amountTextInput}
       />
+      <Text>{date.toDateString()}</Text>
+
+      <TouchableOpacity onPress={() => setShow(true)}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 24,
+            color: "#FFFFFF",
+            fontWeight: "700",
+            backgroundColor: "blue",
+            borderRadius: 4,
+            paddingVertical: 8,
+          }}
+        >
+          Select Date
+        </Text>
+        {show && (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="default"
+            onChange={(event: any, selectedDate: any) => {
+              setShow(false);
+              if (selectedDate) setDate(selectedDate);
+            }}
+          />
+        )}
+      </TouchableOpacity>
       <View style={styles.toggleButtonView}>
         <TouchableOpacity
           style={
@@ -133,6 +164,7 @@ const AddTransactionScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
+
       {active == "Expense" ? (
         <>
           <Text style={styles.header}>Select Category</Text>
@@ -143,7 +175,7 @@ const AddTransactionScreen = () => {
                 style={[
                   styles.categoryView,
                   index == selectedCategoryIndex
-                    ? { backgroundColor: "red" }
+                    ? { backgroundColor: "blue" }
                     : null,
                 ]}
                 onPress={() => {
@@ -200,6 +232,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#000000",
     fontSize: 20,
+    marginTop: 8,
   },
   amountTextInput: {
     borderRadius: 4,
@@ -207,11 +240,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.4,
     padding: 4,
     marginVertical: 8,
+    height: 48,
   },
   toggleButtonView: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 16,
   },
   activeToggle: {
     justifyContent: "center",

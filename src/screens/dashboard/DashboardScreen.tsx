@@ -1,7 +1,7 @@
 import { logout } from "@/src/store/slices/authSlice";
 import React, { useState } from "react";
 import {
-  FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -33,64 +33,119 @@ const DashboardScreen = ({ navigation }: any) => {
   );
   console.log("user in dashboard", user);
   console.log(totalExpense);
-  const visibleTransactions = expand ? transactions : transactions.slice(-3);
+  // const visibleTransactions = expand ? transactions : transactions.slice(-3);
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.welcomeText}>Welcome 👋</Text>
-      <Text style={styles.emailText}>{user?.email}</Text>
-      <View style={styles.balanceCard}>
-        <Text style={styles.balanceHeader}>Total Income</Text>
-        <Text style={styles.balanceText}>₹ {totalIncome}</Text>
-      </View>
-      <View style={styles.balanceCard}>
-        <Text style={styles.balanceHeader}>Total Expense</Text>
-        <Text style={styles.balanceText}>₹ {totalExpense}</Text>
-      </View>
-      <View style={styles.buttonView}>
-        <TouchableOpacity
-          style={styles.addTransactionButton}
-          onPress={() => navigation.navigate("Transaction")}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
         >
+          <>
+            <Text style={styles.welcomeText}>Welcome 👋</Text>
+            <Text style={styles.emailText}>{user?.email}</Text>
+          </>
           <Text
-            style={{ textAlign: "center", color: "#FFFFFF", fontWeight: 500 }}
+            style={{ color: "red", fontSize: 16 }}
+            onPress={() => dispatch(logout())}
           >
-            Transactions
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={() => dispatch(logout())}
-        >
-          <Text style={{ textAlign: "center", fontWeight: 500 }}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-      {transactions.length > 0 ? (
-        <View style={styles.transactionSummary}>
-          <Text>Recent Transactions</Text>
-
-          <View style={styles.listContainer}>
-            <FlatList
-              data={visibleTransactions}
-              keyExtractor={(item, index) => index.toString()}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <View style={styles.itemContainer}>
-                  <Text>
-                    {item.type === "income" ? "⬆" : "⬇"} ₹ {item.amount}
-                  </Text>
-                </View>
-              )}
-            />
-          </View>
-
-          <Text
-            style={{ textAlign: "right" }}
-            onPress={() => setExpand(!expand)}
-          >
-            {expand ? "Hide" : "See more"}
+            🚪 Logout
           </Text>
         </View>
-      ) : null}
+
+        <View
+          style={[
+            styles.balanceCard,
+            {
+              backgroundColor: "green",
+            },
+          ]}
+        >
+          <Text style={styles.balanceHeader}>Total Income</Text>
+          <Text style={styles.balanceText}>₹ {totalIncome}</Text>
+        </View>
+        <View
+          style={[
+            styles.balanceCard,
+            {
+              backgroundColor: "red",
+            },
+          ]}
+        >
+          <Text style={styles.balanceHeader}>Total Expense</Text>
+          <Text style={styles.balanceText}>₹ {totalExpense}</Text>
+        </View>
+        <View style={styles.buttonView}>
+          <TouchableOpacity
+            style={styles.addTransactionButton}
+            onPress={() => navigation.navigate("AddTransaction")}
+          >
+            <Text
+              style={{ textAlign: "center", color: "#FFFFFF", fontWeight: 500 }}
+            >
+              Add Transactions
+            </Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity
+            style={styles.logoutButton}
+            onPress={() => dispatch(logout())}
+          >
+            <Text style={{ textAlign: "center", fontWeight: 500 }}>Logout</Text>
+          </TouchableOpacity> */}
+        </View>
+        {transactions.length > 0 ? (
+          <View style={styles.transactionSummary}>
+            <Text>Recent Transactions</Text>
+
+            <View style={styles.listContainer}>
+              {transactions.map((item: any, index: any) => (
+                <View key={String(index)} style={styles.itemContainer}>
+                  <Text>
+                    <Text
+                      style={{
+                        color: item.type === "income" ? "green" : "red",
+                      }}
+                    ></Text>
+                    {item.type === "income" ? "⬆" : "⬇"} ₹ {item.amount}
+                  </Text>
+                  <Text>{item.date}</Text>
+                </View>
+              ))}
+
+              {/* <FlatList
+                nestedScrollEnabled
+                data={transactions}
+                keyExtractor={(item, index) => index.toString()}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <View style={styles.itemContainer}>
+                    <Text>
+                      <Text
+                        style={{
+                          color: item.type === "income" ? "green" : "red",
+                        }}
+                      ></Text>
+                      {item.type === "income" ? "⬆" : "⬇"} ₹ {item.amount}
+                    </Text>
+                    <Text>{item.date}</Text>
+                  </View>
+                )}
+              /> */}
+            </View>
+            {transactions.length > 3 ? (
+              <Text
+                style={{ textAlign: "right" }}
+                onPress={() => navigation.navigate("Transaction")}
+              >
+                See more
+              </Text>
+            ) : null}
+          </View>
+        ) : null}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -108,7 +163,6 @@ const styles = StyleSheet.create({
     color: "#808080",
   },
   balanceCard: {
-    backgroundColor: "green",
     borderRadius: 16,
     padding: 16,
     marginTop: 16,
@@ -149,7 +203,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     marginVertical: 16,
-    flex: 1,
+    // flex: 1,
   },
   listContainer: {
     // maxHeight: 250,
